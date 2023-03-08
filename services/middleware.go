@@ -11,7 +11,7 @@ import (
 	"github.com/golang-jwt/jwt"
 )
 
-func CreateToken(user models.EMPLR) models.AuthSession {
+func CreateToken(user models.Employee) models.AuthSession {
 	var obj models.AuthSession
 	obj.Header = "Authorization"
 	obj.JwtType = "Bearer"

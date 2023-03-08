@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type EMPLR struct {
+type Employee struct {
 	FCSKID     string    `gorm:"primaryKey;column:FCSKID;type:char;size:8;not null;index;" json:"fcskid"  form:"fcskid"` // FCSKID char(8) COLLATE Thai_BIN DEFAULT ' ' NOT NULL,
 	FCUDATE    string    `gorm:"column:FCUDATE" json:"fcudate"  form:"fcudate"`                                          // FCUDATE char(2) COLLATE Thai_BIN DEFAULT ' ' NOT NULL,
 	FCUTIME    string    `gorm:"column:FCUTIME" json:"fcutime"  form:"fcutime"`                                          // FCUTIME char(2) COLLATE Thai_BIN DEFAULT ' ' NOT NULL,
@@ -48,11 +48,11 @@ type EMPLR struct {
 	FCAPPNAME  string    `gorm:"column:FCAPPNAME" json:"fcappname"  form:"fcappname"`                                    // FCAPPNAME varchar(128) COLLATE Thai_BIN DEFAULT '' NOT NULL,
 }
 
-func (EMPLR) TableName() string {
+func (Employee) TableName() string {
 	return "EMPLR"
 }
 
-func (obj *EMPLR) BeforeCreate(tx *gorm.DB) (err error) {
+func (obj *Employee) BeforeCreate(tx *gorm.DB) (err error) {
 	id, _ := g.New(8)
 	obj.FCSKID = id
 	return

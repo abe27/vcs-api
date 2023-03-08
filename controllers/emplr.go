@@ -12,7 +12,7 @@ import (
 
 func GetAllEmployee(c *fiber.Ctx) error {
 	var r models.Response
-	var emp []models.EMPLR
+	var emp []models.Employee
 	err := configs.Store.Find(&emp).Error
 	if err != nil {
 		r.Message = err.Error()
@@ -37,7 +37,7 @@ func EmployeeLogin(c *fiber.Ctx) error {
 	}
 
 	db := configs.Store
-	var emp models.EMPLR
+	var emp models.Employee
 	err := db.Where("FCLOGIN=?", strings.ToUpper(frm.UserName)).Where("FCPW=?", strings.ToUpper(frm.Password)).First(&emp).Error
 	if err != nil {
 		r.Message = err.Error()
@@ -74,7 +74,7 @@ func GetProfile(c *fiber.Ctx) error {
 	}
 
 	id := fmt.Sprintf("%v", empID)
-	var emp models.EMPLR
+	var emp models.Employee
 	if err := configs.Store.First(&emp, "FCSKID", id).Error; err != nil {
 		r.Message = er.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)

@@ -13,7 +13,11 @@ var (
 )
 
 func SetDB() {
-	if !Store.Migrator().HasTable(&models.EMPLR{}) {
-		Store.AutoMigrate(&models.EMPLR{})
+	if !Store.Migrator().HasTable(&models.Employee{}) {
+		Store.AutoMigrate(&models.Employee{})
+	}
+
+	if !Store.Migrator().HasTable(&models.Product{}) {
+		Store.AutoMigrate(&models.Product{})
 	}
 }
