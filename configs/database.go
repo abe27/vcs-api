@@ -9,6 +9,8 @@ var (
 	StoreVCST       *gorm.DB
 	StoreFormula    *gorm.DB
 	StoreITC        *gorm.DB
+	StoreBSV        *gorm.DB
+	StoreAAA        *gorm.DB
 	API_TRIGGER_URL string
 	APP_NAME        string
 	APP_DESCRIPTION string
