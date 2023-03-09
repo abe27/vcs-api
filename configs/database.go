@@ -24,4 +24,8 @@ func SetDB() {
 	if !StoreFormula.Migrator().HasTable(&models.Product{}) {
 		StoreFormula.AutoMigrate(&models.Product{})
 	}
+
+	if !StoreFormula.Migrator().HasTable(&models.ProductType{}) {
+		StoreFormula.AutoMigrate(&models.ProductType{})
+	}
 }

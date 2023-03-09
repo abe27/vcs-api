@@ -14,7 +14,7 @@ func ProductGetAll(c *fiber.Ctx) error {
 	var r models.Response
 	if c.Query("id") != "" {
 		var prod models.Product
-		if err := db.First(&prod, &models.Product{PRODUCTID: c.Query("id")}).Error; err != nil {
+		if err := db.Preload("ProductType").First(&prod, &models.Product{PRODUCTID: c.Query("id")}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusInternalServerError).JSON(&r)
 		}
@@ -23,7 +23,7 @@ func ProductGetAll(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
 	var prod []models.Product
-	if err := db.Scopes(services.Paginate(c)).Order("FCSKID").Find(&prod).Error; err != nil {
+	if err := db.Scopes(services.Paginate(c)).Preload("ProductType").Order("FCSKID").Find(&prod).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
@@ -51,7 +51,7 @@ func ProductPost(c *fiber.Ctx) error {
 	prod.FNSTDCOST = frm.FNSTDCOST
 
 	var checkProd models.Product
-	if err := configs.StoreFormula.First(&checkProd, &models.Product{FCCODE: frm.FCCODE}).Error; err != nil {
+	if err := configs.StoreVCST.First(&checkProd, &models.Product{FCCODE: frm.FCCODE}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
@@ -62,7 +62,7 @@ func ProductPost(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
 
-	if err := configs.StoreFormula.Create(&prod).Error; err != nil {
+	if err := configs.StoreVCST.Create(&prod).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
@@ -80,7 +80,7 @@ func ProductPut(c *fiber.Ctx) error {
 	}
 
 	var prod models.Product
-	if err := configs.StoreFormula.Where("FCSKID=?", c.Params("id")).First(&prod).Error; err != nil {
+	if err := configs.StoreVCST.Where("FCSKID=?", c.Params("id")).First(&prod).Error; err != nil {
 		r.Message = fmt.Sprintf("Not Found Product %s", frm.FCCODE)
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
@@ -94,7 +94,7 @@ func ProductPut(c *fiber.Ctx) error {
 	prod.FNAVGCOST = frm.FNAVGCOST
 	prod.FNSTDCOST = frm.FNSTDCOST
 
-	if err := configs.StoreFormula.Save(&prod).Error; err != nil {
+	if err := configs.StoreVCST.Save(&prod).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
@@ -106,12 +106,12 @@ func ProductPut(c *fiber.Ctx) error {
 func ProductDelete(c *fiber.Ctx) error {
 	var r models.Response
 	var prod models.Product
-	if err := configs.StoreFormula.Where("FCSKID=?", c.Params("id")).First(&prod).Error; err != nil {
+	if err := configs.StoreVCST.Where("FCSKID=?", c.Params("id")).First(&prod).Error; err != nil {
 		r.Message = fmt.Sprintf("Not Found Product %s", c.Params("id"))
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
 
-	if err := configs.StoreFormula.Delete(&prod).Error; err != nil {
+	if err := configs.StoreVCST.Delete(&prod).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}

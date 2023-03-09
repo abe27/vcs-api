@@ -19,6 +19,13 @@ func SetUpRouter(c *fiber.App) {
 	app.Get("/employee/all", controllers.GetAllEmployee)
 	app.Get("/employee/me", controllers.GetProfile)
 
+	// Product Type Router
+	prodType := app.Group("/productType")
+	prodType.Get("", controllers.ProductTypeGetAll)
+	prodType.Post("", controllers.ProductTypePost)
+	prodType.Put("/:id", controllers.ProductTypePut)
+	prodType.Delete("/:id", controllers.ProductTypeDelete)
+
 	// Product Router
 	prod := app.Group("/product")
 	prod.Get("", controllers.ProductGetAll)
