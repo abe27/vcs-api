@@ -6,18 +6,20 @@ import (
 )
 
 var (
-	Store           *gorm.DB
+	StoreVCST       *gorm.DB
+	StoreFormula    *gorm.DB
+	StoreITC        *gorm.DB
 	API_TRIGGER_URL string
 	APP_NAME        string
 	APP_DESCRIPTION string
 )
 
 func SetDB() {
-	if !Store.Migrator().HasTable(&models.Employee{}) {
-		Store.AutoMigrate(&models.Employee{})
+	if !StoreFormula.Migrator().HasTable(&models.Employee{}) {
+		StoreFormula.AutoMigrate(&models.Employee{})
 	}
 
-	if !Store.Migrator().HasTable(&models.Product{}) {
-		Store.AutoMigrate(&models.Product{})
+	if !StoreFormula.Migrator().HasTable(&models.Product{}) {
+		StoreFormula.AutoMigrate(&models.Product{})
 	}
 }

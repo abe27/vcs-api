@@ -13,7 +13,7 @@ import (
 func GetAllEmployee(c *fiber.Ctx) error {
 	var r models.Response
 	var emp []models.Employee
-	err := configs.Store.Find(&emp).Error
+	err := configs.StoreFormula.Find(&emp).Error
 	if err != nil {
 		r.Message = err.Error()
 		r.Data = &err
@@ -36,14 +36,14 @@ func EmployeeLogin(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(&r)
 	}
 
-	db := configs.Store
+	db := configs.StoreFormula
 	var emp models.Employee
 	err := db.Where("FCLOGIN=?", strings.ToUpper(frm.UserName)).Where("FCPW=?", strings.ToUpper(frm.Password)).First(&emp).Error
 	if err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
-	err = configs.Store.First(&emp).Error
+	err = configs.StoreFormula.First(&emp).Error
 	if err != nil {
 		r.Message = err.Error()
 		r.Data = &err
@@ -75,7 +75,7 @@ func GetProfile(c *fiber.Ctx) error {
 
 	id := fmt.Sprintf("%v", empID)
 	var emp models.Employee
-	if err := configs.Store.First(&emp, "FCSKID", id).Error; err != nil {
+	if err := configs.StoreFormula.First(&emp, "FCSKID", id).Error; err != nil {
 		r.Message = er.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}

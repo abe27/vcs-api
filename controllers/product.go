@@ -10,7 +10,7 @@ import (
 )
 
 func ProductGetAll(c *fiber.Ctx) error {
-	db := configs.Store
+	db := configs.StoreFormula
 	var r models.Response
 	if c.Query("id") != "" {
 		var prod models.Product
@@ -51,7 +51,7 @@ func ProductPost(c *fiber.Ctx) error {
 	prod.FNSTDCOST = frm.FNSTDCOST
 
 	var checkProd models.Product
-	if err := configs.Store.First(&checkProd, &models.Product{FCCODE: frm.FCCODE}).Error; err != nil {
+	if err := configs.StoreFormula.First(&checkProd, &models.Product{FCCODE: frm.FCCODE}).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
@@ -62,7 +62,7 @@ func ProductPost(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
 
-	if err := configs.Store.Create(&prod).Error; err != nil {
+	if err := configs.StoreFormula.Create(&prod).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
@@ -80,7 +80,7 @@ func ProductPut(c *fiber.Ctx) error {
 	}
 
 	var prod models.Product
-	if err := configs.Store.Where("FCSKID=?", c.Params("id")).First(&prod).Error; err != nil {
+	if err := configs.StoreFormula.Where("FCSKID=?", c.Params("id")).First(&prod).Error; err != nil {
 		r.Message = fmt.Sprintf("Not Found Product %s", frm.FCCODE)
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
@@ -94,7 +94,7 @@ func ProductPut(c *fiber.Ctx) error {
 	prod.FNAVGCOST = frm.FNAVGCOST
 	prod.FNSTDCOST = frm.FNSTDCOST
 
-	if err := configs.Store.Save(&prod).Error; err != nil {
+	if err := configs.StoreFormula.Save(&prod).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
@@ -106,12 +106,12 @@ func ProductPut(c *fiber.Ctx) error {
 func ProductDelete(c *fiber.Ctx) error {
 	var r models.Response
 	var prod models.Product
-	if err := configs.Store.Where("FCSKID=?", c.Params("id")).First(&prod).Error; err != nil {
+	if err := configs.StoreFormula.Where("FCSKID=?", c.Params("id")).First(&prod).Error; err != nil {
 		r.Message = fmt.Sprintf("Not Found Product %s", c.Params("id"))
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}
 
-	if err := configs.Store.Delete(&prod).Error; err != nil {
+	if err := configs.StoreFormula.Delete(&prod).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}

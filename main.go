@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"strings"
 	"time"
 
 	"github.com/abe27/cvst20/api/configs"
@@ -15,7 +14,6 @@ import (
 	"github.com/joho/godotenv"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
-	"gorm.io/gorm/schema"
 )
 
 func init() {
@@ -25,21 +23,11 @@ func init() {
 	}
 
 	// initial database
-	dsn := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s&encrypt=disable&connection+timeout=30", os.Getenv("MSSQL_USER"), os.Getenv("MSSQL_PASSWORD"), os.Getenv("MSSQL_HOST"), os.Getenv("MSSQL_PORT"), os.Getenv("MSSQL_DATABASE"))
-	// dsn := "sqlserver://fm1234:x2y2@192.168.20.9:1433?database=formula65" // db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
-	// fmt.Println(dsn)
-	configs.Store, err = gorm.Open(sqlserver.Open(dsn), &gorm.Config{
-		DisableAutomaticPing:                     true,
-		DisableForeignKeyConstraintWhenMigrating: false,
-		SkipDefaultTransaction:                   true,
+	dsnFormula := fmt.Sprintf("sqlserver://%s:%s@%s:%s?database=%s&encrypt=disable&connection+timeout=30", os.Getenv("DB_FORMULA_MSSQL_USER"), os.Getenv("DB_FORMULA_MSSQL_PASSWORD"), os.Getenv("DB_FORMULA_MSSQL_HOST"), os.Getenv("DB_FORMULA_MSSQL_PORT"), os.Getenv("DB_FORMULA_MSSQL_DATABASE"))
+	configs.StoreFormula, err = gorm.Open(sqlserver.Open(dsnFormula), &gorm.Config{
+		DisableAutomaticPing: true,
 		NowFunc: func() time.Time {
 			return time.Now().Local()
-		},
-		NamingStrategy: schema.NamingStrategy{
-			// TablePrefix:   "tbt_", // table name prefix, table for `User` would be `t_users`
-			SingularTable: false, // use singular table name, table for `User` would be `user` with this option enabled
-			NoLowerCase:   false, // skip the snake_casing of names
-			NameReplacer:  strings.NewReplacer("CID", "Cid"),
 		},
 	})
 
