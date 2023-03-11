@@ -22,7 +22,7 @@ func WhsGetAll(c *fiber.Ctx) error {
 	}
 
 	var whs []models.Whs
-	if err := configs.StoreFormula.Find(&whs).Error; err != nil {
+	if err := configs.StoreFormula.Order("FCCODE").Find(&whs).Error; err != nil {
 		r.Message = fmt.Sprintf("%s is not found", c.Query("id"))
 		return c.Status(fiber.StatusNotFound).JSON(&r)
 	}

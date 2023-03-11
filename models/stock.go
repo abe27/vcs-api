@@ -16,6 +16,7 @@ type Stock struct {
 	FTLASTUPD time.Time `gorm:"column:FTLASTUPD" json:"ftlastupd" form:"ftlastupd"`
 	Whs       Whs       `gorm:"foreignKey:FCWHOUSE;references:FCSKID;" json:"whs,omitempty"`
 	Product   Product   `gorm:"foreignKey:FCPROD;references:FCSKID;" json:"product,omitempty"`
+	RefProd   RefProd   `gorm:"foreignKey:FCPROD;references:FCPROD;" json:"refprod,omitempty"`
 }
 
 func (Stock) TableName() string {

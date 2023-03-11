@@ -14,6 +14,7 @@ func RefProdGetAll(c *fiber.Ctx) error {
 	var refprod []models.RefProd
 	if c.Query("glref") != "" {
 		if err := configs.StoreFormula.
+			Scopes(services.Paginate(c)).
 			Preload("GlRef.FromWhs").
 			Preload("GlRef.ToWhs").
 			Preload("Product.ProductType").
@@ -29,10 +30,13 @@ func RefProdGetAll(c *fiber.Ctx) error {
 
 	if c.Query("fcprod") != "" {
 		if err := configs.StoreFormula.
+			Scopes(services.Paginate(c)).
 			Preload("GlRef.FromWhs").
 			Preload("GlRef.ToWhs").
 			Preload("Product.ProductType").
 			Preload("Whs").
+			Order("FTLASTUPD").
+			// Order("FCIOTYPE").
 			Find(&refprod, &models.RefProd{FCPROD: c.Query("fcprod")}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusNotFound).JSON(&r)
@@ -48,6 +52,7 @@ func RefProdGetAll(c *fiber.Ctx) error {
 		Preload("GlRef.ToWhs").
 		Preload("Product.ProductType").
 		Preload("Whs").
+		Order("FTLASTUPD").
 		Find(&refprod).
 		Error; err != nil {
 		r.Message = err.Error()

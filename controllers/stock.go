@@ -7,6 +7,7 @@ import (
 	"github.com/abe27/cvst20/api/models"
 	"github.com/abe27/cvst20/api/services"
 	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
 )
 
 func StockGetAll(c *fiber.Ctx) error {
@@ -26,6 +27,25 @@ func StockGetAll(c *fiber.Ctx) error {
 	}
 
 	var stock []models.Stock
+	if c.Query("partno") != "" {
+		fmt.Println(c.Query("partno") + "%")
+		if err := configs.StoreFormula.
+			Scopes(services.Paginate(c)).
+			Preload("Whs").
+			Preload("Product", func(db *gorm.DB) *gorm.DB {
+				return db.Where("FCCODE like ?", "%"+c.Query("partno")+"%")
+			}).
+			Preload("Product.ProductType").
+			// Preload("Product", "FCCODE LIKE ?", "%"+c.Query("partno")+"%").
+			Find(&stock).Error; err != nil {
+			r.Message = err.Error()
+			return c.Status(fiber.StatusNotFound).JSON(&r)
+		}
+		r.Message = "Show All Stock"
+		r.Data = &stock
+		return c.Status(fiber.StatusOK).JSON(&r)
+	}
+
 	if err := configs.StoreFormula.
 		Scopes(services.Paginate(c)).
 		Preload("Whs").
