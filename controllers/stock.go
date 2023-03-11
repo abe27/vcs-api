@@ -7,7 +7,6 @@ import (
 	"github.com/abe27/cvst20/api/models"
 	"github.com/abe27/cvst20/api/services"
 	"github.com/gofiber/fiber/v2"
-	"gorm.io/gorm"
 )
 
 func StockGetAll(c *fiber.Ctx) error {
@@ -28,15 +27,21 @@ func StockGetAll(c *fiber.Ctx) error {
 
 	var stock []models.Stock
 	if c.Query("partno") != "" {
-		fmt.Println(c.Query("partno") + "%")
+		var part []models.Product
+		if err := configs.StoreFormula.Scopes(services.Paginate(c)).Select("FCSKID").Where("FCCODE like ?", "%"+c.Query("partno")+"%").Find(&part).Error; err != nil {
+			r.Message = err.Error()
+			return c.Status(fiber.StatusNotFound).JSON(&r)
+		}
+		var lstPart []string
+		for _, p := range part {
+			lstPart = append(lstPart, p.FCSKID)
+		}
+
 		if err := configs.StoreFormula.
 			Scopes(services.Paginate(c)).
 			Preload("Whs").
-			Preload("Product", func(db *gorm.DB) *gorm.DB {
-				return db.Where("FCCODE like ?", "%"+c.Query("partno")+"%")
-			}).
 			Preload("Product.ProductType").
-			// Preload("Product", "FCCODE LIKE ?", "%"+c.Query("partno")+"%").
+			Where("FCPROD in ?", lstPart).
 			Find(&stock).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusNotFound).JSON(&r)

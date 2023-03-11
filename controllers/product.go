@@ -14,7 +14,7 @@ func ProductGetAll(c *fiber.Ctx) error {
 	var r models.Response
 	if c.Query("id") != "" {
 		var prod models.Product
-		if err := db.Preload("ProductType").First(&prod, &models.Product{PRODUCTID: c.Query("id")}).Error; err != nil {
+		if err := db.Preload("ProductType").First(&prod, &models.Product{FCSKID: c.Query("id")}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusInternalServerError).JSON(&r)
 		}
@@ -69,7 +69,7 @@ func ProductPost(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
 
-	if checkProd.PRODUCTID != "" {
+	if checkProd.FCSKID != "" {
 		r.Message = fmt.Sprintf("%s Is Duplicate!", frm.FCCODE)
 		r.Data = &checkProd
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
@@ -79,7 +79,7 @@ func ProductPost(c *fiber.Ctx) error {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
-	r.Message = fmt.Sprintf("Create Product %s", frm.PRODUCTID)
+	r.Message = fmt.Sprintf("Create Product %s", frm.FCSKID)
 	r.Data = &prod
 	return c.Status(fiber.StatusCreated).JSON(&r)
 }
@@ -111,7 +111,7 @@ func ProductPut(c *fiber.Ctx) error {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
 	}
-	r.Message = fmt.Sprintf("Update Product %s Completed.", frm.PRODUCTID)
+	r.Message = fmt.Sprintf("Update Product %s Completed.", frm.FCSKID)
 	r.Data = &prod
 	return c.Status(fiber.StatusOK).JSON(&r)
 }
