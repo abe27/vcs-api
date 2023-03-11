@@ -1,7 +1,6 @@
 package configs
 
 import (
-	"github.com/abe27/cvst20/api/models"
 	"gorm.io/gorm"
 )
 
@@ -17,15 +16,15 @@ var (
 )
 
 func SetDB() {
-	if !StoreFormula.Migrator().HasTable(&models.Employee{}) {
-		StoreFormula.AutoMigrate(&models.Employee{})
-	}
+	// if !StoreFormula.Migrator().HasTable(&models.Employee{}) {
+	// 	StoreFormula.AutoMigrate(&models.Employee{})
+	// }
 
-	if !StoreFormula.Migrator().HasTable(&models.Product{}) {
-		StoreFormula.AutoMigrate(&models.Product{})
-	}
+	// if !StoreFormula.Migrator().HasTable(&models.Product{}) {
+	// 	StoreFormula.AutoMigrate(&models.Product{})
+	// }
 
-	if !StoreFormula.Migrator().HasTable(&models.ProductType{}) {
-		StoreFormula.AutoMigrate(&models.ProductType{})
-	}
+	// if !StoreFormula.Migrator().HasTable(&models.ProductType{}) {
+	// 	StoreFormula.AutoMigrate(&models.ProductType{})
+	// }
 }

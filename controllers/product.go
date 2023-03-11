@@ -23,6 +23,20 @@ func ProductGetAll(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(&r)
 	}
 	var prod []models.Product
+	if c.Query("partno") != "" {
+		var prod models.Product
+		if err := db.Scopes(services.Paginate(c)).
+			Preload("ProductType").
+			Where("FCCODE LIKE ?", "%"+c.Query("partno")+"%").
+			Find(&prod).Error; err != nil {
+			r.Message = err.Error()
+			return c.Status(fiber.StatusInternalServerError).JSON(&r)
+		}
+		r.Message = fmt.Sprintf("Show Products Like %s", c.Query("id"))
+		r.Data = &prod
+		return c.Status(fiber.StatusOK).JSON(&r)
+	}
+
 	if err := db.Scopes(services.Paginate(c)).Preload("ProductType").Order("FCSKID").Find(&prod).Error; err != nil {
 		r.Message = err.Error()
 		return c.Status(fiber.StatusInternalServerError).JSON(&r)
