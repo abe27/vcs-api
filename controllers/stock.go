@@ -16,6 +16,8 @@ func StockGetAll(c *fiber.Ctx) error {
 		if err := configs.StoreFormula.
 			Preload("Whs").
 			Preload("Product.ProductType").
+			Preload("RefProd.GlRef.FromWhs").
+			Preload("RefProd.GlRef.ToWhs").
 			First(&stock, &models.Stock{ID: c.Query("id")}).Error; err != nil {
 			r.Message = err.Error()
 			return c.Status(fiber.StatusNotFound).JSON(&r)
@@ -41,6 +43,8 @@ func StockGetAll(c *fiber.Ctx) error {
 			Scopes(services.Paginate(c)).
 			Preload("Whs").
 			Preload("Product.ProductType").
+			Preload("RefProd.GlRef.FromWhs").
+			Preload("RefProd.GlRef.ToWhs").
 			Where("FCPROD in ?", lstPart).
 			Find(&stock).Error; err != nil {
 			r.Message = err.Error()
@@ -55,6 +59,8 @@ func StockGetAll(c *fiber.Ctx) error {
 		Scopes(services.Paginate(c)).
 		Preload("Whs").
 		Preload("Product.ProductType").
+		Preload("RefProd.GlRef.FromWhs").
+		Preload("RefProd.GlRef.ToWhs").
 		Find(&stock).
 		Error; err != nil {
 		r.Message = err.Error()
