@@ -24,7 +24,6 @@ func ProductGetAll(c *fiber.Ctx) error {
 	}
 	var prod []models.Product
 	if c.Query("partno") != "" {
-		var prod models.Product
 		if err := db.Scopes(services.Paginate(c)).
 			Preload("ProductType").
 			Where("FCCODE LIKE ?", "%"+c.Query("partno")+"%").

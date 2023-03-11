@@ -17,6 +17,7 @@ type Product struct {
 	FNSTDCOST   float64     `gorm:"column:FNSTDCOST" json:"fnstdcost"  form:"fnstdcost"`            //FNSTDCOST decimal(15,4) DEFAULT 0 NOT NULL,
 	FCSTATUS    string      `gorm:"column:FCSTATUS;size:1;type:char" json:"status" form:"fcstatus"` //FCSTATUS
 	ProductType ProductType `gorm:"foreignKey:FCTYPE;references:FCCODE;" json:"product_type,omitempty"`
+	// Stock       []Stock     `gorm:"foreignKey:FCSKID;references:FCPROD"`
 	// Stock       []Stock     `gorm:"foreignKey:PRODUCTID;references:FCPROD;" json:"stock,omitempty"`
 	// FTDATETIME time.Time `gorm:"column:FTDATETIME" json:"ftdatetime"  form:"ftdatetime" default:"now"` //FTDATETIME datetime DEFAULT getdate() NOT NULL,
 	// FTLASTUPD  time.Time `gorm:"column:FTLASTUPD" json:"ftlastupd"  form:"ftlastupd" default:"now"`    //FTLASTUPD datetime DEFAULT getdate() NULL,
